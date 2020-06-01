@@ -1,0 +1,12 @@
+{
+  "domain": "microsoft_graph_calendar",
+  "name": "Microsoft Graph Calendar",
+  "config_flow": true,
+  "documentation": "https://www.home-assistant.io/integrations/microsoft_graph_calendar",
+  "requirements": [],
+  "ssdp": [],
+  "zeroconf": [],
+  "homekit": {},
+  "dependencies": [],
+  "codeowners": ["@fadamsen"]
+}
