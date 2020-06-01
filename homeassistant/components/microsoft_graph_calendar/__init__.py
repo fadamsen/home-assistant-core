@@ -30,8 +30,7 @@ CONFIG_SCHEMA = vol.Schema(
 
 # TODONE List the platforms that you want to support.
 # For your initial PR, limit it to 1 platform.
-#PLATFORMS = ["binary_sensor"]
-PLATFORMS = []
+PLATFORMS = ["binary_sensor"]
 
 
 async def async_setup(hass: HomeAssistant, config: dict):
@@ -58,6 +57,18 @@ async def async_setup(hass: HomeAssistant, config: dict):
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     """Set up Microsoft Graph Calendar from a config entry."""
+    config_flow.OAuth2FlowHandler.async_register_implementation(
+        hass,
+        config_entry_oauth2_flow.LocalOAuth2Implementation(
+            hass,
+            DOMAIN,
+            entry.data[CONF_CLIENT_ID],
+            entry.data[CONF_CLIENT_SECRET],
+            OAUTH2_AUTHORIZE_FORMAT.format(entry.data[CONF_TENANT_ID]),
+            OAUTH2_TOKEN_FORMAT.format(entry.data[CONF_TENANT_ID]),
+        ),
+    )
+
     implementation = await config_entry_oauth2_flow.async_get_config_entry_implementation(
         hass, entry
     )

@@ -1,5 +1,6 @@
 """Config flow for Microsoft Graph Calendar."""
 import logging
+
 import voluptuous as vol
 
 from homeassistant import config_entries
@@ -35,7 +36,7 @@ class OAuth2FlowHandler(
     def extra_authorize_data(self) -> dict:
         """Extra data that needs to be appended to the authorize url."""
         return {
-            "scope": "Calendars.Read offline",
+            "scope": "Calendars.Read offline_access",
         }
 
     async def async_step_user(self, user_input=None):
@@ -60,18 +61,16 @@ class OAuth2FlowHandler(
             return await self.async_step_pick_implementation()
 
         return self.async_show_form(
-            step_id="user", data_schema=vol.Schema({
-                CONF_CLIENT_ID: str,
-                CONF_CLIENT_SECRET: str,
-                CONF_TENANT_ID: str,
-            })
+            step_id="user",
+            data_schema=vol.Schema(
+                {CONF_CLIENT_ID: str, CONF_CLIENT_SECRET: str, CONF_TENANT_ID: str,}
+            ),
         )
 
     async def async_oauth_create_entry(self, data):
         """Create an entry for the flow.
         Ok to override if you want to provide extra info.
         """
-        # Store client ID so auth keeps working if we change base url
         data[CONF_CLIENT_ID] = self.client_id
         data[CONF_CLIENT_SECRET] = self.client_secret
         data[CONF_TENANT_ID] = self.tenant_id
